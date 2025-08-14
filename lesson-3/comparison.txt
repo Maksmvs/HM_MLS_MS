@@ -1,0 +1,14 @@
+Fat image:
+- Size: ~1.2GB
+- Layers: 10
+- Містить зайві пакети apt
+
+Slim image:
+- Size: ~300MB
+- Layers: 6
+- Без зайвих dev-пакетів
+
+Оптимізація:
+- Використання torch CPU-only
+- Alpine-based образ
+- Виключення кешу pip
