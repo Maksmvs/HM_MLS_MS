@@ -3,7 +3,7 @@
 LOG_FILE="install.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "$(date)-Початок встановлення середовища"
+echo "$(date) - Початок встановлення середовища"
 
 # Перевірка та встановлення Docker
 if ! command -v docker &>/dev/null; then
@@ -13,7 +13,7 @@ if ! command -v docker &>/dev/null; then
     sudo systemctl enable docker
     sudo systemctl start docker
 else
-    echo "Docker встановлений"
+    echo "Docker вже встановлений: $(docker --version)"
 fi
 
 # Docker Compose
@@ -21,7 +21,7 @@ if ! command -v docker-compose &>/dev/null; then
     echo "[INFO] Встановлення Docker Compose..."
     sudo apt install -y docker-compose
 else
-    echo "Docker Compose встановлений"
+    echo "Docker Compose вже встановлений: $(docker-compose --version)"
 fi
 
 # Python ≥ 3.9
@@ -31,7 +31,7 @@ if [[ -z "$PYTHON_VERSION" || "$(printf '%s\n' "3.9" "$PYTHON_VERSION" | sort -V
     sudo apt install -y python3.9 python3.9-venv python3.9-distutils
     sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
 else
-    echo "Python версії $PYTHON_VERSION"
+    echo "Python вже встановлений: версія $PYTHON_VERSION"
 fi
 
 # pip
@@ -39,7 +39,7 @@ if ! command -v pip3 &>/dev/null; then
     echo "[INFO] Встановлення pip..."
     sudo apt install -y python3-pip
 else
-    echo "[OK] pip вже встановлений"
+    echo "pip вже встановлений: версія $(pip3 --version)"
 fi
 
 # Python-бібліотеки
@@ -48,8 +48,9 @@ for pkg in django torch torchvision pillow; do
         echo "[INFO] Встановлення $pkg..."
         pip3 install $pkg
     else
-        echo "$pkg встановлений"
+        VERSION=$(pip3 show $pkg | grep Version | awk '{print $2}')
+        echo "$pkg вже встановлений: версія $VERSION"
     fi
 done
 
-echo "$(date) -Встановлення завершено"
+echo "$(date) - Встановлення завершено"
