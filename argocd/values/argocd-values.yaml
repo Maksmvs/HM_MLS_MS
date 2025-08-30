@@ -1,0 +1,17 @@
+server:
+  service:
+    type: LoadBalancer
+    port: 80
+  extraArgs:
+    - --insecure
+controller:
+  metrics:
+    enabled: true
+repoServer:
+  resources:
+    limits:
+      cpu: "200m"
+      memory: "256Mi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
