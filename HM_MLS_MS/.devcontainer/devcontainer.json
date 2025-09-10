@@ -1,0 +1,8 @@
+{
+  "name": "MLOps Training Automation",
+  "image": "mcr.microsoft.com/devcontainers/python:3.9",
+  "features": {
+    "ghcr.io/devcontainers/features/aws-cli:1": {}
+  },
+  "postCreateCommand": "pip install --upgrade pip && pip install boto3"
+}
