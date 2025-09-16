@@ -1,0 +1,13 @@
+stages:
+  - retrain
+
+retrain-model:
+  stage: retrain
+  image: python:3.10
+  script:
+    - pip install joblib
+    - python model/train.py
+    - echo "✅ Retrain complete, model.pkl updated"
+  artifacts:
+    paths:
+      - model.pkl

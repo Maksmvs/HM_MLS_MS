@@ -1,0 +1,25 @@
+{
+  "dashboard": {
+    "title": "AI Service Metrics",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "Requests per Minute",
+        "targets": [],
+        "id": 1
+      },
+      {
+        "type": "graph",
+        "title": "Latency",
+        "targets": [],
+        "id": 2
+      },
+      {
+        "type": "stat",
+        "title": "Drift Alerts",
+        "targets": [],
+        "id": 3
+      }
+    ]
+  }
+}
