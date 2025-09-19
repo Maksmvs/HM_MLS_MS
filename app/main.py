@@ -1,25 +1,38 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
-import os
+import logging
+from prometheus_fastapi_instrumentator import Instrumentator
+from app.drift import drift_detector
 
-app = FastAPI(title="AI Quality Service")
+# Логування
+logging.basicConfig(level=logging.INFO)
 
-MODEL_PATH = "model.pkl"
+# Ініціалізація FastAPI
+app = FastAPI(title="AIOps Quality Project")
 
+# Завантаження моделі
+model = joblib.load("model/model.pkl")
+
+# Prometheus метрики
+Instrumentator().instrument(app).expose(app)
+
+# Схема вхідних даних
 class InputData(BaseModel):
-    input: float
+    features: list
 
-@app.on_event("startup")
-def load_model():
-    global model
-    if os.path.exists(MODEL_PATH):
-        model = joblib.load(MODEL_PATH)
-    else:
-        # мок-модель, якщо немає файлу
-        model = lambda x: x * 2
+@app.get("/")
+def root():
+    return {"message": "AIOps Quality Project API"}
 
 @app.post("/predict")
 def predict(data: InputData):
-    result = model(data.input)
-    return {"prediction": result}
+    logging.info(f"Received request: {data.features}")
+    prediction = model.predict([data.features])[0]
+
+    # Drift detection
+    drift = drift_detector(data.features)
+    if drift:
+        logging.warning("Drift detected!")
+
+    return {"prediction": int(prediction), "drift_detected": drift}

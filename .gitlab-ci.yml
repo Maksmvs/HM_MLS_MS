@@ -1,13 +1,23 @@
 stages:
+  - build
   - retrain
+  - deploy
+
+build:
+  stage: build
+  script:
+    - docker build -t registry.gitlab.com/username/aiops-quality-project:$CI_COMMIT_SHA .
+    - docker push registry.gitlab.com/username/aiops-quality-project:$CI_COMMIT_SHA
 
 retrain-model:
   stage: retrain
-  image: python:3.10
   script:
-    - pip install joblib
     - python model/train.py
-    - echo "✅ Retrain complete, model.pkl updated"
-  artifacts:
-    paths:
-      - model.pkl
+    - docker build -t registry.gitlab.com/username/aiops-quality-project:retrain .
+    - docker push registry.gitlab.com/username/aiops-quality-project:retrain
+  when: manual
+
+deploy:
+  stage: deploy
+  script:
+    - kubectl apply -f argocd/application.yaml

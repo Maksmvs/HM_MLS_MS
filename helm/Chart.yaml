@@ -1,6 +1,5 @@
 apiVersion: v2
-name: aiops-quality
-description: A Helm chart for AI Quality FastAPI service
-type: application
+name: aiops-quality-project
+description: Helm chart for AIOps Quality Project
 version: 0.1.0
 appVersion: "1.0"

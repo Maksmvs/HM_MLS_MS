@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aiops-quality-project
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: aiops-quality-project
+  template:
+    metadata:
+      labels:
+        app: aiops-quality-project
+    spec:
+      containers:
+        - name: aiops-quality-project
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: MODEL_PATH
+              value: /app/model/model.pkl

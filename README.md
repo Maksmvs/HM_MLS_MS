@@ -1,17 +1,15 @@
-# HM_MLS_MS — Final Project
+# AIOps Quality Project
 
-## Архітектура
-- FastAPI сервіс (`app/main.py`) — інференс моделі
-- Training script (`model/train.py`) — retrain
-- Helm (`helm/`) — деплой у Kubernetes
-- ArgoCD (`argocd/application.yaml`) — GitOps
-- Prometheus + Grafana (`prometheus/`, `grafana/`) — моніторинг
-- GitLab CI (`.gitlab-ci.yml`) — retrain пайплайн
+## 🚀 Компоненти
+- FastAPI + модель
+- Drift detector (Alibi Detect)
+- Helm + ArgoCD
+- Prometheus + Grafana
+- Loki + Promtail
+- GitLab CI retrain pipeline
 
----
-
-## Як запустити локально
+## ▶ Запуск локально
 ```bash
-pip install fastapi uvicorn joblib
-python model/train.py   # створить model.pkl
-uvicorn app.main:app --reload
+python model/train.py
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
